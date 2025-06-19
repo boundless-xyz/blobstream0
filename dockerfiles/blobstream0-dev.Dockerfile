@@ -17,6 +17,8 @@ RUN foundryup
 RUN curl -L https://risczero.com/install | bash
 ENV PATH="/root/.risc0/bin:${PATH}"
 RUN rzup install
+RUN rzup install r0vm 2.0.2
+RUN rzup install cargo-risczero 2.0.2
 
 # Create and set permissions for the /app directory
 # RUN mkdir -p /app && chown -R nobody:nobody /app
