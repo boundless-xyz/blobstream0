@@ -1,5 +1,5 @@
 # Use the official Rust image as the base image
-FROM rust:1.81-bullseye as builder
+FROM rust:1.85-bookworm AS builder
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -14,9 +14,9 @@ RUN curl -L https://foundry.paradigm.xyz | bash
 ENV PATH="/root/.foundry/bin:${PATH}"
 RUN foundryup
 
-RUN cargo install cargo-binstall --version '=1.6.9' --locked
-RUN cargo binstall cargo-risczero@1.1.1 --no-confirm --force
-RUN cargo risczero install
+RUN curl -L https://risczero.com/install | bash
+ENV PATH="/root/.risc0/bin:${PATH}"
+RUN rzup install
 
 # Create and set permissions for the /app directory
 # RUN mkdir -p /app && chown -R nobody:nobody /app
@@ -32,7 +32,7 @@ RUN cargo c -p light-client-guest
 # Build the project
 RUN cargo build -p blobstream0
 
-run cp target/debug/blobstream0 /usr/local/bin/blobstream0
+RUN cp target/debug/blobstream0 /usr/local/bin/blobstream0
 
 # Set the entrypoint to the blobstream0 CLI
 ENTRYPOINT ["blobstream0"]
