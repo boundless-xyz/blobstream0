@@ -38,7 +38,7 @@ use range_iterator::LightBlockRangeIterator;
 // the dockerized service container.
 #[cfg(feature = "prebuilt-docker")]
 const LIGHT_CLIENT_GUEST_ELF: &[u8] =
-    include_bytes!("../../target/riscv-guest/riscv32im-risc0-zkvm-elf/docker/light_client_guest/light-client-guest");
+    include_bytes!("../../target/riscv-guest/light-client-guest/light-client-guest/riscv32im-risc0-zkvm-elf/docker/light-client-guest");
 #[cfg(not(feature = "prebuilt-docker"))]
 use light_client_guest::LIGHT_CLIENT_GUEST_ELF;
 

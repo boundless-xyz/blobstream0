@@ -1,5 +1,5 @@
 # Use the official Rust image as the base image
-FROM rust:1.81-bullseye as builder
+FROM rust:1.85-bookworm AS builder
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -14,9 +14,11 @@ RUN curl -L https://foundry.paradigm.xyz | bash
 ENV PATH="/root/.foundry/bin:${PATH}"
 RUN foundryup
 
-RUN cargo install cargo-binstall --version '=1.6.9' --locked
-RUN cargo binstall cargo-risczero@1.1.1 --no-confirm --force
-RUN cargo risczero install
+RUN curl -L https://risczero.com/install | bash
+ENV PATH="/root/.risc0/bin:${PATH}"
+RUN rzup install
+RUN rzup install r0vm 2.0.2
+RUN rzup install cargo-risczero 2.0.2
 
 # Create and set permissions for the /app directory
 # RUN mkdir -p /app && chown -R nobody:nobody /app
@@ -31,7 +33,7 @@ COPY . .
 RUN cargo build -p blobstream0 --release --features prebuilt-docker,fireblocks
 
 # Create a new stage for a smaller final image
-FROM debian:bullseye-slim as final
+FROM debian:bullseye-slim AS final
 
 # Install necessary runtime dependencies
 RUN apt-get update && apt-get install -y \
