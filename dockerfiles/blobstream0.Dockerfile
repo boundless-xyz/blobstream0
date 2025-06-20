@@ -33,7 +33,7 @@ COPY . .
 RUN cargo build -p blobstream0 --release --features prebuilt-docker,fireblocks
 
 # Create a new stage for a smaller final image
-FROM debian:bullseye-slim as final
+FROM debian:bullseye-slim AS final
 
 # Install necessary runtime dependencies
 RUN apt-get update && apt-get install -y \
